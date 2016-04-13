@@ -1,9 +1,14 @@
 package com.csc.colloquium1;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Xml;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,6 +34,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Cursor cursor = managedQuery(ReaderContentProvider.CURRENCIES_URI, null, null, null, null);
+
+        ListView listView = (ListView) findViewById(R.id.lv);
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor,
+                new String[]{CurrenciesTable.COLUMN_NAME, CurrenciesTable.COLUMN_VALUE},
+                new int[]{android.R.id.text1, android.R.id.text2});
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor item = (Cursor) adapter.getItem(position);
+                Currency currency = Currency.from(cursor);
+                Intent intent = new Intent(MainActivity.this, ConverterActivity.class);
+                intent.putExtra(ConverterActivity.EXTRA_NAME, currency.name);
+                intent.putExtra(ConverterActivity.EXTRA_RATE, currency.rate);
+                startActivity(intent);
+            }
+        });
 
         new Thread(new Runnable() {
             @Override

@@ -16,15 +16,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <provider
             android:name=".ReaderContentProvider"
             android:authorities="com.csc.colloquium1"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
+        <activity android:name=".ConverterActivity"></activity>
     </application>
 
 </manifest>

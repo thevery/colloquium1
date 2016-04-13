@@ -1,6 +1,7 @@
 package com.csc.colloquium1;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 public class Currency {
     public final String name;
@@ -24,5 +25,11 @@ public class Currency {
                 "name='" + name + '\'' +
                 ", rate=" + rate +
                 '}';
+    }
+
+    public static Currency from(Cursor cursor) {
+        String name = cursor.getString(cursor.getColumnIndex(CurrenciesTable.COLUMN_NAME));
+        Double rate = cursor.getDouble(cursor.getColumnIndex(CurrenciesTable.COLUMN_VALUE));
+        return new Currency(name, rate);
     }
 }

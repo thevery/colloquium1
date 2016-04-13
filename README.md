@@ -26,3 +26,7 @@
  - 13:17 курс в XML (http://www.cbr.ru/scripts/XML_daily.asp)
  - 13:41 DOM parser
  - 13:51 content provider
+ - 13:52 - 14:14 lunch :)
+ - 14:19 ListView
+ - 14:31 second activity started
+ - 14:36 second activity done
