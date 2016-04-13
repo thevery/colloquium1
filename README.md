@@ -20,3 +20,9 @@
 
 ## NB
  - Сдача только очно
+
+## thevery timings
+ - 13:13 project fork
+ - 13:17 курс в XML (http://www.cbr.ru/scripts/XML_daily.asp)
+ - 13:41 DOM parser
+ - 13:51 content provider
