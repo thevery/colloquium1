@@ -30,3 +30,5 @@
  - 14:19 ListView
  - 14:31 second activity started
  - 14:36 second activity done
+ - 14:41 menu added
+ - 14:46 insert/update

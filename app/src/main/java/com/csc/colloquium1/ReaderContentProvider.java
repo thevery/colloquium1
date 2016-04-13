@@ -90,7 +90,18 @@ public class ReaderContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = uriMatcher.match(uri);
+        String tableName;
+        switch (match) {
+            case CURRENCIES:
+                tableName = CurrenciesTable.TABLE_NAME;
+                break;
+            case ENTRIES_ID:
+            default:
+                throw new UnsupportedOperationException("Not yet implemented");
+        }
+        int updated = helper.getWritableDatabase().update(tableName, values, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return updated;
     }
 }

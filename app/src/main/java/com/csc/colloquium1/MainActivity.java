@@ -2,9 +2,12 @@ package com.csc.colloquium1;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Xml;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -53,15 +56,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        reload();
+    }
+
+    @NonNull
+    private void reload() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-
-                    Cursor cursor = getContentResolver().query(ReaderContentProvider.CURRENCIES_URI, null, null, null, null);
-                    System.out.println("cursor.getCount() = " + cursor.getCount());
-                    cursor.close();
-
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder builder = factory.newDocumentBuilder();
                     Document document = builder.parse("http://www.cbr.ru/scripts/XML_daily.asp");
@@ -85,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
                         Currency currency = new Currency(charCode, rate);
                         currencyList.add(currency);
 
-                        getContentResolver().insert(ReaderContentProvider.CURRENCIES_URI, currency.toContentValues());
+                        int updated = getContentResolver().update(ReaderContentProvider.CURRENCIES_URI, currency.toContentValues(), CurrenciesTable.COLUMN_NAME + "=?", new String[]{currency.name});
+
+                        if (updated == 0) {
+                            getContentResolver().insert(ReaderContentProvider.CURRENCIES_URI, currency.toContentValues());
+                        }
                     }
 
                     System.out.println("currencyList = " + currencyList);
@@ -94,5 +101,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.reload:
+                reload();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }
